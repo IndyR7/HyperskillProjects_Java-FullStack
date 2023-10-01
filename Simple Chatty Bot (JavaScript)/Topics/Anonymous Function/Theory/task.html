@@ -1,0 +1,68 @@
+<h2>Anonymous Function</h2>
+<div class="step-text">
+<p></p><p>Often in development, we need to use a function once and don't want to give it a name. There are times when we need to pass a function as a parameter to another function and don't need to call it again elsewhere in our code. Sometimes we need to immediately call the created function. For these purposes, you can use an anonymous function. Let's take a closer look at this notion.</p><h5 id="anonymous-function-syntax">Anonymous function syntax</h5><p>An<strong> anonymous function </strong>is a function that does not use an identifier when created. There is a basic rule: if a function does not have an identifier after the <code class="language-javascript">function</code> keyword, then it is anonymous, otherwise, it is named.</p><p>Let's look at a classic example of an anonymous function.</p><pre><code class="language-javascript">function () {
+  return 'Hello world!';
+}</code></pre><p>An anonymous function is created here in exactly the same way as a named one, but the identifier is omitted.</p><pre><code class="language-javascript">const greetings = function () {
+  return 'Hello world!';
+}
+
+greetings(); // 'Hello world!'</code></pre><p>In this case, an anonymous function is created using the <code class="language-javascript">function</code> keyword and assigned to a variable. Now we can use this function using the variable to which we have assigned this anonymous function.</p><p><strong>Hoisting</strong> is a mechanism in JavaScript in which variables and <code class="language-javascript">function</code> declarations (declarations using the <code class="language-javascript">function</code> keyword), are moved to the top of their scope before the code is executed. When we create named functions with the <code class="language-javascript">function</code> keyword, they are always "hoisted" to the top of their containing scope. When we assign an anonymous function to a variable created with the <code class="language-javascript">function</code> keyword, the hoisting mechanism does not work.</p><pre><code class="language-javascript">funcOne(); // 'One'
+
+function funcOne () {
+  return 'One';
+}
+
+funcTwo(); // Error
+
+const funcTwo = function () {
+  return 'Two';
+}</code></pre><p>You should remember that an anonymous function is not available once it has been created unless we have assigned it to a variable as a value. Functions are recommended to be assigned using <code class="language-javascript">const</code> (after all, we are not going to change it).</p><p>If you define an anonymous function but leave it unused, you'll get an error. In order to avoid this, you can immediately call it or assign it to a variable.</p><p><img alt="Uncaught SyntaxError" height="85" src="https://ucarecdn.com/f40a0fe8-efda-4205-a88c-ad17ef1ac63d/" width="363"/></p><h5 id="passing-anonymous-function-as-an-argument">Passing anonymous function as an argument</h5><p>There are several common use cases for anonymous functions in development. Often we have to pass a function as an argument to other functions.</p><pre><code class="language-javascript">function alertMessage(text) {
+  console.log(text());
+}
+
+alertMessage(function () {
+  return "Hello world!";
+});
+
+// Hello world! will be printed in the console</code></pre><p>In this example, we pass an anonymous function to another function as an argument, call the anonymous function in it, and use the result of calling it. We can assign an anonymous function to a variable and do the same.</p><pre><code class="language-javascript">function alertMessage(text) {
+  console.log(text());
+}
+
+const textFunc = function () {
+  return "Hello world!";
+};
+
+alertMessage(textFunc);
+
+// Hello world! will be printed in console</code></pre><h5 id="immediate-execution-of-anonymous-function">Immediate execution of anonymous function</h5><p>IIFE (Immediately Invoked Function Expression) is a function that is immediately called at the place of its creation. You might need it if you do not want to clog your code and if this function is not useful to you in the future. After all, in a large application, it may be important not to create multiple unnecessary global variables. There are cases when you will need to immediately call a function at the place of its creation. In this case, you can use an anonymous function.</p><p>First, to create it, we must wrap the anonymous function in parentheses which is called the <strong>grouping operator</strong>. We usually use grouping operators to determine the precedence of evaluation in expressions. Then, put a pair of parentheses in order to call this function.</p><pre><code class="language-javascript">(function () {
+  console.log('Hello world!');
+})();
+
+// Same thing just in arrow function syntax
+
+(() =&gt; {
+  console.log('Hello world!');
+})();
+
+// 'Hello world!' will be printed to the console</code></pre><p>In the parentheses of the function call, we can pass as an argument any value provided in the anonymous function.</p><pre><code class="language-javascript">(function (text) {
+  console.log(text);
+})("Hello world!");
+
+// 'Hello world!' will be printed to the console</code></pre><h5 id="arrow-functions">Arrow functions</h5><p>Arrow functions are a simpler syntax for anonymous functions. An arrow function consists of parentheses to pass arguments to the function, an "arrow" consisting of an equal sign and a greater than sign, and the body of the function.</p><pre><code class="language-javascript">() =&gt; {
+  return 'Hello world!';
+}
+
+// Same thing just in different syntax
+
+function () {
+  return 'Hello world!';
+}</code></pre><p>You can also assign an arrow function to a variable and then use it for your own purposes.</p><pre><code class="language-javascript">const greeting = () =&gt; {
+  console.log('Hello world!');
+}
+
+greeting() // 'Hello world!'</code></pre><p>There are several other ways to simplify the arrow function. You can leave out parentheses if you have one parameter.</p><pre><code class="language-javascript">const greetings = text =&gt; {
+  return text;
+}</code></pre><p>And you can leave out curly braces and the <code class="language-javascript">return</code> keyword if we have a very simple expression.</p><pre><code class="language-javascript">const greetings = (text) =&gt; text;
+
+// This function returns text which was passed as an argument</code></pre><h5 id="conclusion">Conclusion</h5><p>Functions are called anonymous if there is no identifier after their declaration after the <code class="language-javascript">function</code> keyword. Otherwise, the function is named. The syntax of anonymous functions is almost the same as named functions, except for the absence of a function name.</p><p>We can pass anonymous functions as an argument to another function. This is the most common use case for anonymous functions in development. Anonymous functions must be assigned to variables or called immediately after creation using IIFE (Immediately Invoked Function Expression), otherwise, you will get an error. Arrow functions are the syntax for anonymous functions. They are simpler and more concise in terms of syntax.</p>
+</div>

@@ -1,0 +1,15 @@
+type: code
+files:
+  - name: main.js
+    visible: true
+    text: |-
+      let func = (a, b) => ( return a * b);
+      console.log(func(5, 10));
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/8459#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sun, 01 Oct 2023 14:42:57 UTC"
+record: -1
+submission_language: javascript

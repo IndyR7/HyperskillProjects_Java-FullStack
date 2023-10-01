@@ -1,0 +1,17 @@
+type: code
+files:
+  - name: main.js
+    visible: true
+    highlight_level: NONE
+    text: |-
+      function languageInfo(language){
+           // write your code here
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/10695#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sun, 01 Oct 2023 14:30:49 UTC"
+record: -1
+submission_language: javascript

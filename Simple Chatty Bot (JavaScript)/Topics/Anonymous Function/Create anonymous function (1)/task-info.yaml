@@ -1,0 +1,15 @@
+type: code
+custom_name: Create anonymous function
+files:
+  - name: main.js
+    visible: true
+    highlight_level: NONE
+    text: // write your code here
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/26930#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sun, 01 Oct 2023 14:24:53 UTC"
+record: -1
+submission_language: javascript

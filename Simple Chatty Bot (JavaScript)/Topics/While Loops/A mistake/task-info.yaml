@@ -1,0 +1,18 @@
+type: code
+files:
+  - name: main.js
+    visible: true
+    text: |-
+      let n = 5;
+      do (n < 10) {
+          n = n + 1;
+          console.log(n);
+      } while;
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/9136#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sun, 01 Oct 2023 14:01:10 UTC"
+record: -1
+submission_language: javascript

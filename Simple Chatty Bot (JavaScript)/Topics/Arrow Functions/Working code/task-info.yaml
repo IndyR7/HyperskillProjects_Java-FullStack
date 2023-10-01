@@ -1,0 +1,18 @@
+type: code
+files:
+  - name: main.js
+    visible: true
+    highlight_level: NONE
+    text: |-
+      let func1 = () => a / b + a * b;
+      let func2 = () => c + 5 * d / c;
+      // change the code above this line
+      let result = 7 - func1(50, 4) / func2(40, 30);
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/8847#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Sun, 01 Oct 2023 14:41:30 UTC"
+record: -1
+submission_language: javascript
