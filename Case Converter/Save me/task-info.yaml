@@ -1,0 +1,270 @@
+type: edu
+files:
+  - name: src/index.html
+    visible: true
+    text: |
+      <!doctype html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <title>Document</title>
+      </head>
+      <body>
+      
+      </body>
+      </html>
+    learner_created: false
+  - name: test/test.js
+    visible: false
+    text: |+
+      const fs = require("fs");
+      const path = require('path');
+      const rimraf = require("rimraf");
+      const workingDir = path.resolve(__dirname, '../src');
+      const pagePath = 'file://' + path.resolve(__dirname, workingDir + '/index.html');
+      
+      const {StageTest, correct, wrong} = require('hs-test-web');
+      
+      class ConverterTest extends StageTest {
+      
+          page = this.getPage(pagePath)
+      
+          tests = [
+              this.page.execute(() => {
+                  const nodes = document.getElementsByClassName("title");
+      
+                  if (nodes.length !== 1) {
+                      return wrong("There should be one element with class 'title', found " + nodes.length + "!")
+                  }
+      
+                  const titleDiv = nodes[0];
+      
+                  if (titleDiv.textContent !== 'Case Converter') {
+                      return wrong("The title name should be 'Case Converter', but found " + titleDiv.textContent.trim())
+                  }
+      
+                  return correct()
+              }),
+              this.page.execute(() => {
+                  const nodes = document.getElementsByTagName("textarea");
+      
+                  if (nodes.length !== 1) {
+                      return wrong("There should be one 'textarea' element, found " + nodes.length + "!")
+                  }
+      
+                  this.textArea = nodes[0];
+      
+                  if (this.textArea.textContent.trim() !== '') {
+                      return wrong("TextArea should be empty by default!")
+                  }
+      
+                  return correct()
+              }),
+              this.page.execute(() => {
+                  this.upperCaseButton = document.querySelector("button#upper-case")
+                  this.lowerCaseButton = document.querySelector("button#lower-case")
+                  this.properCaseButton = document.querySelector("button#proper-case")
+                  this.sentenceCaseButton = document.querySelector("button#sentence-case")
+                  this.saveTextFileButton = document.querySelector("button#save-text-file")
+      
+                  if (this.upperCaseButton === null) {
+                      return wrong("Can't find a button with '#upper-case' id!")
+                  }
+      
+                  if (this.lowerCaseButton === null) {
+                      return wrong("Can't find a button with '#lower-case' id!")
+                  }
+      
+                  if (this.properCaseButton === null) {
+                      return wrong("Can't find a button with '#proper-case' id!")
+                  }
+      
+                  if (this.sentenceCaseButton === null) {
+                      return wrong("Can't find a button with '#sentence-case' id!")
+                  }
+      
+                  if (this.saveTextFileButton === null) {
+                      return wrong("Can't find a button with '#save-text-file' id!")
+                  }
+      
+                  return correct()
+              }),
+              this.page.execute(() => {
+      
+                  this.textArea.value = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.' +
+                      ' Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,' +
+                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      
+                  const upperCaseText = 'LOREM IPSUM IS SIMPLY DUMMY TEXT OF THE PRINTING AND TYPESETTING INDUSTRY.' +
+                      ' LOREM IPSUM HAS BEEN THE INDUSTRY\'S STANDARD DUMMY TEXT EVER SINCE THE 1500S,' +
+                      ' WHEN AN UNKNOWN PRINTER TOOK A GALLEY OF TYPE AND SCRAMBLED IT TO MAKE A TYPE SPECIMEN BOOK.'
+      
+                  this.upperCaseButton.click()
+      
+                  if (this.textArea.value !== upperCaseText) {
+                      return wrong("After clicking on 'Upper Case' button your text is wrong!")
+                  }
+      
+                  const lowerCaseText = 'lorem ipsum is simply dummy text of the printing and typesetting industry.' +
+                      ' lorem ipsum has been the industry\'s standard dummy text ever since the 1500s,' +
+                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      
+                  this.lowerCaseButton.click()
+      
+                  if (this.textArea.value !== lowerCaseText) {
+                      return wrong("After clicking on 'Lower Case' button your text is wrong!")
+                  }
+      
+                  const properCase = 'Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry.' +
+                      ' Lorem Ipsum Has Been The Industry\'s Standard Dummy Text Ever Since The 1500s,' +
+                      ' When An Unknown Printer Took A Galley Of Type And Scrambled It To Make A Type Specimen Book.'
+      
+                  this.properCaseButton.click()
+      
+                  if (this.textArea.value !== properCase) {
+                      return wrong("After clicking on 'Proper Case' button your text is wrong!")
+                  }
+      
+                  const sentenceCase = 'Lorem ipsum is simply dummy text of the printing and typesetting industry.' +
+                      ' Lorem ipsum has been the industry\'s standard dummy text ever since the 1500s,' +
+                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      
+                  this.sentenceCaseButton.click()
+      
+                  if (this.textArea.value !== sentenceCase) {
+                      return wrong("After clicking on 'Sentence Case' button your text is wrong!")
+                  }
+      
+                  return correct()
+              }),
+              this.node.execute(async () => {
+                  await this.page.pageInstance._client.send('Page.setDownloadBehavior', {
+                      behavior: 'allow',
+                      downloadPath: workingDir + path.sep + "downloads"
+                  });
+                  return correct()
+              }),
+              this.page.execute(async () => {
+                  this.saveTextFileButton.click()
+      
+                  const delay = ms => new Promise(res => setTimeout(res, ms));
+                  await delay(2000);
+      
+                  return correct()
+              }),
+              this.node.execute(() => {
+                  const correctTextFileContent = 'Lorem ipsum is simply dummy text of the printing and typesetting industry.' +
+                      ' Lorem ipsum has been the industry\'s standard dummy text ever since the 1500s,' +
+                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      
+                  const filePath = workingDir + `${path.sep}downloads${path.sep}text.txt`;
+      
+                  if (!fs.existsSync(filePath)) {
+                      return wrong("Looks like you didn't download a text file named 'text.txt', after clicking on 'Save Text File' button")
+                  }
+      
+                  let fileContent = fs.readFileSync(filePath, "utf8");
+      
+                  if (fileContent !== correctTextFileContent) {
+                      return wrong("Content of downloaded file is wrong!")
+                  }
+      
+                  rimraf.sync(workingDir + '/downloads');
+      
+                  return correct()
+              })
+          ]
+      }
+      
+      it('Test stage', async function () {
+          try {
+              this.timeout(30000)
+          } catch (ignored) {
+          }
+          await new ConverterTest().runTests()
+      }, 30000)
+    
+    learner_created: false
+  - name: src/style.css
+    visible: true
+    text: |-
+      body {
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          padding: 10px;
+      }
+      
+      .title {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-size: 40px;
+      }
+      
+      textarea {
+          width: 98vw;
+          height: 80vh;
+          border: black solid 1px;
+          align-self: center;
+          margin-top: 6px;
+      }
+      
+      .footer {
+          display: flex;
+          position: relative;
+          margin-top: 15px;
+      }
+      
+      button {
+          background-color: coral;
+          font-size: 25px;
+          margin-left: 20px;
+      }
+      
+      #upper-case {
+      
+      }
+      
+      #lower-case {
+      
+      }
+      
+      #proper-case {
+      
+      }
+      
+      #sentence-case {
+      
+      }
+    learner_created: true
+  - name: src/textManipulation.js
+    visible: true
+    learner_created: true
+  - name: src/downloadManager.js
+    visible: true
+    learner_created: true
+feedback_link: https://hyperskill.org/learn/step/14001#comment
+status: Failed
+feedback:
+  message: |-
+    Unexpected error in test #5
+
+    We have recorded this bug and will fix it soon.
+
+    System win32 10.0.22621 x64
+    Testing library version 4.0.1
+    Node.js version 18.17.1
+    Puppeteer version 21.3.6
+    Mocha version 9.2.2
+
+    TypeError: this.page.pageInstance._client.send is not a function
+        at C:\Users\indyr\WebstormProjects\Case Converter\Case Converter\task\test\test.js:122:50
+        at TestRun.testCase (C:\Users\indyr\WebstormProjects\Case Converter\node_modules\hs-test-web\dist\hstest\environment\node.js:6:20)
+        at JsRunner.test (C:\Users\indyr\WebstormProjects\Case Converter\node_modules\hs-test-web\dist\hstest\testing\runner\jsRunner.js:9:24)
+        at TestRun.test (C:\Users\indyr\WebstormProjects\Case Converter\node_modules\hs-test-web\dist\hstest\testing\testRun.js:29:38)
+        at ConverterTest._runTests (C:\Users\indyr\WebstormProjects\Case Converter\node_modules\hs-test-web\dist\hstest\stage\stageTest.js:57:46)
+        at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+        at async ConverterTest.runTests (C:\Users\indyr\WebstormProjects\Case Converter\node_modules\hs-test-web\dist\hstest\stage\stageTest.js:28:9)
+        at async Context.<anonymous> (C:\Users\indyr\WebstormProjects\Case Converter\Case Converter\task\test\test.js:165:5)
+  time: "Fri, 06 Oct 2023 18:23:41 UTC"
+record: 3
