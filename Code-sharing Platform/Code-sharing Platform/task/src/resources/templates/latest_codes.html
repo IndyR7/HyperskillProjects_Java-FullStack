@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="">
+<head>
+    <title>Latest</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+<div th:each="codeResponse : ${codeResponses}">
+    <span id="load_date" th:utext="${codeResponse.date}"></span>
+    <pre id="code_snippet"><code th:utext="${codeResponse.code}"></code></pre>
+</div>
+</body>
+</html>

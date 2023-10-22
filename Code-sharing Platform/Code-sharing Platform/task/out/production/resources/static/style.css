@@ -1,0 +1,42 @@
+body {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+textarea {
+    height: 50vh;
+}
+
+#code_snippet {
+    border: black solid 1px;
+    background-color: aliceblue;
+    color: black;
+    width: 95%;
+    padding: 10px;
+}
+
+#load_date {
+    color: green;
+    margin-bottom: 5px;
+}
+
+#send_snippet {
+    width: 70px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+#time_restriction, #views_restriction {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 70px;
+}
+
+label {
+    display: inline-block;
+    width: 120px;
+}
